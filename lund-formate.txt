@@ -1,0 +1,64 @@
+   // Header:
+   // Lund format reference: https://gemc.jlab.org/gemc/Documentation/Entries/2011/3/18_The_LUND_Format.html
+   // Column    Quantity
+   //   1      Number of particles
+   //   2*     Number of target nucleons
+   //   3*     Number of target protons
+   //   4*     Target Polarization
+   //   5      Beam Polarization
+   //   6*     x
+   //   7*     y
+   //   8*     W
+   //   9*     Q2
+   //   10*    nu
+   s  << eg_event.fParticles->GetEntries()    << " "
+      << eg_event.fXSec->GetA()              << " "
+      << eg_event.fXSec->GetZ()              << " "
+      << eg_event.fTargetPol                 << " "
+      << eg_event.fBeamPol                   << " "
+      << 0.0 /* x  */                         << " "
+      << 0.0 /* y  */                         << " "
+      << 0.0 /* W  */                         << " "
+      << 0.0 /* Q2 */                         << " "
+      << 0.0 /* nu */                         << "\n";
+
+
+   // Lund format reference: https://gemc.jlab.org/gemc/Documentation/Entries/2011/3/18_The_LUND_Format.html
+   // Particles:
+   // Column    Quantity
+   //   1      index
+   //   2      charge
+   //   3      type(=1 is active)
+   //   4      particle id
+   //   5      parent id (decay bookkeeping)
+   //   6      daughter (decay bookkeeping)
+   //   7      px [GeV]
+   //   8      py [GeV]
+   //   9      pz [GeV]
+   //   10     E [GeV]
+   //   11     mass (not used)
+   //   12     x vertex [m]
+   //   13     y vertex [m]
+   //   14     z vertex [m]
+   // NOTE the vertex is in METERS unlike the website above
+   int iLund = i+1;
+   InSANEParticle * part     = (InSANEParticle*)eg_event.fParticles->At(i);
+   TParticlePDG   * part_pdg = part->GetPDG();
+   s << "  "
+      << iLund                  << " "
+      << part_pdg->Charge()/3.0 << " "
+      << 1                      << " "
+      << part_pdg->PdgCode()    << " "
+      << 0                      << " "
+      << 0                      << " "
+      << part->Px()             << " "
+      << part->Py()             << " "
+      << part->Pz()             << " "
+      << part->Energy()         << " "
+      << part_pdg->Mass()       << " "
+      << part->Vx()/100.0       << " "
+      << part->Vy()/100.0       << " "
+      << part->Vz()/100.0       << "\n";
+}
+//______________________________________________________________________________
+
